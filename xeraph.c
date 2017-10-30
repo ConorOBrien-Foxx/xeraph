@@ -228,6 +228,10 @@ void xeraph_run(XERAPH* inst) {
 }
 
 int main(int argc, char** argv) {
+    if(argc < 2) {
+        fprintf(stderr, "Error: no arguments given\n");
+        return 1;
+    }
     size_t len;
     char* content = read_file(argv[1], &len);
     if(!content)
