@@ -146,6 +146,9 @@ void xeraph_step(XERAPH* inst) {
     else if(cur == ',') {
         inst->code[inst->mem_ind] = getchar();
     }
+    else if(cur == 'n') {
+        inst->head = -1;
+    }
     else if(cur == ';') {
         inst->head = inst->code[inst->mem_ind];
     }
