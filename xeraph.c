@@ -38,21 +38,16 @@ int* rectify(char* str, size_t str_size, size_t* out_width, size_t* out_height) 
         }
     }
     size_t max_width = 0, cur_width = 0, height = 0;
-    // printf("new section = ");
     for(size_t i = 0; i <= str_size; i++) {
         if(i == str_size || str[i] == '\n') {
             if(cur_width > max_width)
                 max_width = cur_width;
             height++;
             cur_width = 0;
-            // printf("\nnew section = ");
         } else {
             cur_width++;
-            // putchar(str[i]);
         }
     }
-    
-    // printf("MAX_WIDTH = %i\n", max_width);
     
     int* res = malloc(sizeof(int) * (max_width * height + 1));
     res[max_width * height] = '\0';
@@ -118,7 +113,6 @@ void xeraph_advance(XERAPH* inst) {
 
 void xeraph_step(XERAPH* inst) {
     char cur = xeraph_charat(inst, inst->x, inst->y);
-    // printf("current@(%i,%i) = %c;\n", inst->x, inst->y, cur);
     if(cur == '+') {
         inst->code[inst->mem_ind]++;
     }
@@ -141,10 +135,31 @@ void xeraph_step(XERAPH* inst) {
         putchar(inst->code[inst->mem_ind]);
     }
     else if(cur == '#') {
-        printf("%i",inst->code[inst->mem_ind]);
+        printf("%i", inst->code[inst->mem_ind]);
     }
     else if(cur == ',') {
         inst->code[inst->mem_ind] = getchar();
+    }
+    else if(cur == '@') {
+        scanf(" %i", &inst->code[inst->mem_ind]);
+    }
+    else if(cur == 'h') {
+        inst->code[inst->mem_ind] = inst->head;
+    }
+    else if(cur == '*') {
+        inst->code[inst->mem_ind] *= inst->head;
+    }
+    else if(cur == 'a') {
+        inst->code[inst->mem_ind] += inst->head;
+    }
+    else if(cur == '%') {
+        inst->code[inst->mem_ind] %= inst->head;
+    }
+    else if(cur == '/') {
+        inst->code[inst->mem_ind] /= inst->head;
+    }
+    else if(cur == 's') {
+        inst->code[inst->mem_ind] -= inst->head;
     }
     else if(cur == 'n') {
         inst->head = -1;
@@ -157,7 +172,7 @@ void xeraph_step(XERAPH* inst) {
         inst->head = xeraph_charat(inst, inst->x, inst->y);
     }
     else if(cur == 'D') {
-        printf("memhead = %i; width = %i;\n", inst->mem_ind, inst->width);
+        printf("memhead = %zu; width = %zu;\n", inst->mem_ind, inst->width);
         for(size_t i = 0; i < inst->size; i++) {
             putchar(inst->code[i]);
             if((i + 1) % inst->width == 0)
@@ -167,7 +182,6 @@ void xeraph_step(XERAPH* inst) {
     }
     else if(cur == '|') {
         if(inst->code[inst->mem_ind] == inst->head) {
-            
             inst->dx = 0;
             inst->dy = 1;
         }
@@ -176,8 +190,8 @@ void xeraph_step(XERAPH* inst) {
             inst->dy = -1;
         }
     }
-    else if(cur == '0') {
-        inst->head = '\0';
+    else if(cur >= '0' && cur <= '9') {
+        inst->head = cur - '0';
     }
     else if(cur == '_') {
         if(inst->code[inst->mem_ind] == inst->head) {
